@@ -118,7 +118,7 @@ public class Main extends JPanel {
             // Return action
             if (menuOptions[menuSelection].equals("Retour")) {
                 inOptionsMenu = false;
-                menuOptions = new String[] { "Continuer", "Options" };
+                menuOptions = new String[] { "Continuer", "Options", "Quit" };
                 menuSelection = 0;
             }
 
@@ -129,13 +129,18 @@ public class Main extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
+        // Game background
+        if (backgroundImage != null) {
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), null);
+        } else {
+            g.setColor(new Color(0, 0, 0, 150));
+            g.fillRect(0, 0, getWidth(), getHeight());
+        }
         // Character
         g.setColor(Color.WHITE);
         g.fillRect(x, y, taille, taille);
-
         if (menuVisible) {
-            // Background
-            // Background image
+            // Background Menu
             if (backgroundImage != null) {
                 g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), null);
             } else {
@@ -143,6 +148,23 @@ public class Main extends JPanel {
                 g.setColor(new Color(0, 0, 0, 150));
                 g.fillRect(0, 0, getWidth(), getHeight());
             }
+            // Fonts
+            Font titleFont;
+            try {
+                titleFont = Font.createFont(Font.TRUETYPE_FONT,
+                        getClass().getResourceAsStream("/assets/fonts/PressStart2P-Regular.ttf"));
+            } catch (Exception e) {
+                titleFont = new Font("Dialog", Font.BOLD, 72);
+            }
+
+            // **Draw title**
+            FontMetrics titleFM = g.getFontMetrics(titleFont.deriveFont(Font.BOLD, 50));
+            g.setFont(titleFont.deriveFont(Font.BOLD, 50));
+            String titleText = "2D.Game";
+            int titleX = (getWidth() - titleFM.stringWidth(titleText)) / 2;
+            int titleY = 150;
+            g.setColor(Color.WHITE);
+            g.drawString(titleText, titleX, titleY);
 
             // Fonts
             try {
@@ -156,8 +178,8 @@ public class Main extends JPanel {
 
             // Center menu
             FontMetrics fm = g.getFontMetrics();
-            int startY = 200;
-            int spacing = 16;
+            int startY = 250;
+            int spacing = 28;
 
             int currentY = startY;
             for (int i = 0; i < menuOptions.length; i++) {
@@ -166,16 +188,29 @@ public class Main extends JPanel {
                 int textHeight = fm.getAscent();
                 int xPos = (getWidth() - textWidth) / 2;
                 int yPos = currentY + textHeight;
-                int padding = 10;
-                g.setColor(new Color(0, 0, 0, 150));
+                int padding = 20;
+
+                // Bg option
+                if (i == menuSelection) {
+                    g.setColor(new Color(0, 0, 0, 250));
+                } else {
+                    g.setColor(new Color(0, 0, 0, 180));
+                }
                 g.fillRoundRect(xPos - padding, yPos - textHeight - padding, textWidth + 2 * padding,
                         textHeight + 2 * padding, 4, 4);
+                // Border option
+                if (i == menuSelection) {
+                    g.setColor(Color.decode("#441294"));
+                    g.fillRect(xPos - padding, yPos + padding - 4, textWidth + 2 * padding, 4);
+                }
+                // Text option
                 if (i == menuSelection) {
                     g.setColor(Color.decode("#441294"));
                 } else {
                     g.setColor(Color.WHITE);
                 }
                 g.drawString(text, xPos, yPos);
+
                 currentY += textHeight + spacing + 2 * padding;
             }
         }

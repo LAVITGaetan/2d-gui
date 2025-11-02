@@ -22,10 +22,10 @@ public class SoundManager {
     }
 
     public static void playNavigate() {
-        play("assets/sounds/click.wav");
+        play("assets/sounds/navigateClick.wav");
     }
 
     public static void playSelect() {
-        play("assets/sounds/click.wav");
+        play("assets/sounds/navigateClick.wav");
     }
 }
