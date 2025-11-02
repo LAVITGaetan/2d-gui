@@ -7,7 +7,7 @@ public class Main extends JPanel {
     private int x = 100;
     private int y = 100;
     private final int taille = 50;
-
+    private Image backgroundImage;
     private boolean menuVisible = true;
     private String[] menuOptions = { "Play", "Options", "Quit" };
     private boolean inOptionsMenu = false;
@@ -15,6 +15,11 @@ public class Main extends JPanel {
     private boolean isFullScreen = false;
 
     public Main() {
+        try {
+            backgroundImage = javax.imageio.ImageIO.read(getClass().getResource("/assets/images/theme.png"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         JFrame frame = new JFrame("2D Game");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
@@ -30,6 +35,7 @@ public class Main extends JPanel {
                 int key = e.getKeyCode();
 
                 if (menuVisible) {
+
                     // Menu nav controls
                     switch (key) {
                         case KeyEvent.VK_UP:
@@ -129,8 +135,14 @@ public class Main extends JPanel {
 
         if (menuVisible) {
             // Background
-            g.setColor(new Color(0, 0, 0, 150));
-            g.fillRect(0, 0, getWidth(), getHeight());
+            // Background image
+            if (backgroundImage != null) {
+                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), null);
+            } else {
+                // fallback overlay si image absente
+                g.setColor(new Color(0, 0, 0, 150));
+                g.fillRect(0, 0, getWidth(), getHeight());
+            }
 
             // Fonts
             try {
@@ -144,19 +156,27 @@ public class Main extends JPanel {
 
             // Center menu
             FontMetrics fm = g.getFontMetrics();
+            int startY = 200;
+            int spacing = 16;
+
+            int currentY = startY;
             for (int i = 0; i < menuOptions.length; i++) {
                 String text = menuOptions[i];
                 int textWidth = fm.stringWidth(text);
+                int textHeight = fm.getAscent();
                 int xPos = (getWidth() - textWidth) / 2;
-                int yPos = 200 + i * 50;
+                int yPos = currentY + textHeight;
+                int padding = 10;
+                g.setColor(new Color(0, 0, 0, 150));
+                g.fillRoundRect(xPos - padding, yPos - textHeight - padding, textWidth + 2 * padding,
+                        textHeight + 2 * padding, 4, 4);
                 if (i == menuSelection) {
-                    // Current option
                     g.setColor(Color.decode("#441294"));
                 } else {
-                    // Default option
                     g.setColor(Color.WHITE);
                 }
                 g.drawString(text, xPos, yPos);
+                currentY += textHeight + spacing + 2 * padding;
             }
         }
     }
