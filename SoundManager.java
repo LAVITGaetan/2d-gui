@@ -1,0 +1,31 @@
+import javax.sound.sampled.*;
+import java.io.IOException;
+import java.net.URL;
+
+public class SoundManager {
+
+    public static void play(String fichier) {
+        try {
+            URL url = SoundManager.class.getResource(fichier);
+            if (url == null) return;
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioIn);
+            clip.start();
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void playTheme() {
+        play("assets/sounds/theme.wav");
+    }
+
+    public static void playNavigate() {
+        play("assets/sounds/navigate.wav");
+    }
+
+    public static void playSelect() {
+        play("assets/sounds/select.wav");
+    }
+}
