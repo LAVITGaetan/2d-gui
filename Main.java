@@ -9,7 +9,7 @@ public class Main extends JPanel {
     private final int taille = 50;
     private Image backgroundImage;
     private boolean menuVisible = true;
-    private String[] menuOptions = { "Play", "Options", "Quit" };
+    private String[] menuOptions = { "Play", "Options", "Exit Game" };
     private boolean inOptionsMenu = false;
     private int menuSelection = 0;
     private boolean isFullScreen = false;
@@ -91,7 +91,7 @@ public class Main extends JPanel {
             // Options action
             else if (menuSelection == 1) {
                 inOptionsMenu = true;
-                menuOptions = new String[] { "Plein écran", "Contrôles", "Retour" };
+                menuOptions = new String[] { "Full screen", "Controls", "Return" };
                 menuSelection = 0;
             }
             // Quit action
@@ -100,7 +100,7 @@ public class Main extends JPanel {
             }
         } else {
             // Full screen action
-            if (menuOptions[menuSelection].equals("Plein écran")) {
+            if (menuOptions[menuSelection].equals("Full screen")) {
                 JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
                 topFrame.dispose();
                 if (!isFullScreen) {
@@ -116,9 +116,9 @@ public class Main extends JPanel {
                 topFrame.setVisible(true);
             }
             // Return action
-            if (menuOptions[menuSelection].equals("Retour")) {
+            if (menuOptions[menuSelection].equals("Return")) {
                 inOptionsMenu = false;
-                menuOptions = new String[] { "Continuer", "Options", "Quit" };
+                menuOptions = new String[] { "Play", "Options", "Exit Game" };
                 menuSelection = 0;
             }
 
